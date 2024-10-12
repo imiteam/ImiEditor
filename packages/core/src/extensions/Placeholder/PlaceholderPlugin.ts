@@ -48,7 +48,7 @@ export const PlaceholderPlugin = (
 
         styleSheet.insertRule(
           `${getSelector(blockType, mustBeFocused)}{ content: ${JSON.stringify(
-            placeholder + "custom"
+            placeholder
           )}; }`
         );
 

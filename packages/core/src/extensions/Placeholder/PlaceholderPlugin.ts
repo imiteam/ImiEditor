@@ -43,7 +43,7 @@ export const PlaceholderPlugin = (
               const widget = Decoration.widget(pos + 1, () => {
                 const placeholderEl = document.createElement("span");
                 placeholderEl.className = "placeholder";
-                placeholderEl.textContent = placeholder;
+                placeholderEl.innerHTML = placeholder;
                 return placeholderEl;
               }, { side: -1 });
               decorations.push(widget);

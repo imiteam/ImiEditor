@@ -103,12 +103,15 @@ export function SuggestionMenuController<
     {
       placement: "bottom-start",
       middleware: [
-        offset(state?.ignoreQueryLength === undefined ? 10 : 5),
+        offset({
+          mainAxis: state?.ignoreQueryLength === undefined ? 10 : 0,
+          crossAxis: 0,
+        }),
         // Flips the menu placement to maximize the space available, and prevents
         // the menu from being cut off by the confines of the screen.
         flip({
           mainAxis: true,
-          crossAxis: false,
+          crossAxis: true,
         }),
         shift(),
         size({

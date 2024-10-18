@@ -74,6 +74,7 @@ import { createInternalHTMLSerializer } from "../api/exporters/html/internalHTML
 import { PreviousBlockTypePlugin } from "../extensions/PreviousBlockType/PreviousBlockTypePlugin.js";
 import "../style.css";
 import { initializeESMDependencies } from "../util/esmDependencies.js";
+import {OpenImiAIPlugin} from "../extensions/OpenImiAIPlugin/OpenImiAIPlugin.js";
 
 export type BlockNoteEditorOptions<
   BSchema extends BlockSchema,
@@ -385,6 +386,7 @@ export class BlockNoteEditor<
           ...(this.options.animations ?? true
             ? [PreviousBlockTypePlugin()]
             : []),
+            OpenImiAIPlugin(),
         ];
       },
     });

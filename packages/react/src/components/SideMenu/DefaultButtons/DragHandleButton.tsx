@@ -34,7 +34,7 @@ export const DragHandleButton = <
           props.unfreezeMenu();
         }
       }}
-      position={"left"}>
+      position={"bottom"}>
       <Components.Generic.Menu.Trigger>
         <Components.SideMenu.Button
           label={dict.side_menu.drag_handle_label}

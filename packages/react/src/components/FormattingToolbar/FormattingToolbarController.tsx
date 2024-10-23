@@ -79,7 +79,13 @@ export const FormattingToolbarController = (props: {
     3000,
     {
       placement,
-      middleware: [offset(10), flip()],
+      middleware: [
+        offset(10), 
+        flip({
+          mainAxis: true,
+          crossAxis: true,
+        })
+      ],
       onOpenChange: (open, _event) => {
         // console.log("change", event);
         if (!open) {

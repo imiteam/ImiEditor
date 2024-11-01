@@ -68,7 +68,7 @@ export const imageRender = (
   image.draggable = false;
   image.width = Math.min(
     block.props.previewWidth,
-    editor.domElement.firstElementChild!.clientWidth
+    editor.domElement.firstElementChild ? editor.domElement.firstElementChild!.clientWidth : 150
   );
 
   const file = createResizeHandlesWrapper(

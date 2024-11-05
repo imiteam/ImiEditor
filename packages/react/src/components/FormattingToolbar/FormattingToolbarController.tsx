@@ -1,10 +1,11 @@
 import {
   BlockSchema,
+  DefaultProps,
   InlineContentSchema,
   StyleSchema,
 } from "@blocknote/core";
-import { autoPlacement, offset, shift } from "@floating-ui/react";
-import { FC, useMemo, useRef } from "react";
+import { flip, offset } from "@floating-ui/react";
+import { FC, useMemo, useRef, useState } from "react";
 
 import { useBlockNoteEditor } from "../../hooks/useBlockNoteEditor.js";
 import { useUIElementPositioning } from "../../hooks/useUIElementPositioning.js";
@@ -12,21 +13,22 @@ import { useUIPluginState } from "../../hooks/useUIPluginState.js";
 import { mergeRefs } from "../../util/mergeRefs.js";
 import { FormattingToolbar } from "./FormattingToolbar.js";
 import { FormattingToolbarProps } from "./FormattingToolbarProps.js";
+import {useEditorContentOrSelectionChange} from "../../hooks/useEditorContentOrSelectionChange.js";
 
-// const textAlignmentToPlacement = (
-//   textAlignment: DefaultProps["textAlignment"]
-// ) => {
-//   switch (textAlignment) {
-//     case "left":
-//       return "top-start";
-//     case "center":
-//       return "top";
-//     case "right":
-//       return "top-end";
-//     default:
-//       return "top-start";
-//   }
-// };
+const textAlignmentToPlacement = (
+  textAlignment: DefaultProps["textAlignment"]
+) => {
+  switch (textAlignment) {
+    case "left":
+      return "top-start";
+    case "center":
+      return "top";
+    case "right":
+      return "top-end";
+    default:
+      return "top-start";
+  }
+};
 
 export const FormattingToolbarController = (props: {
   formattingToolbar?: FC<FormattingToolbarProps>;
@@ -39,33 +41,33 @@ export const FormattingToolbarController = (props: {
     StyleSchema
   >();
 
-  // const [placement, setPlacement] = useState<"top-start" | "top" | "top-end">(
-  //   () => {
-  //     const block = editor.getTextCursorPosition().block;
+  const [placement, setPlacement] = useState<"top-start" | "top" | "top-end">(
+    () => {
+      const block = editor.getTextCursorPosition().block;
 
-  //     if (!("textAlignment" in block.props)) {
-  //       return "top-start";
-  //     }
+      if (!("textAlignment" in block.props)) {
+        return "top-start";
+      }
 
-  //     return textAlignmentToPlacement(
-  //       block.props.textAlignment as DefaultProps["textAlignment"]
-  //     );
-  //   }
-  // );
+      return textAlignmentToPlacement(
+        block.props.textAlignment as DefaultProps["textAlignment"]
+      );
+    }
+  );
 
-  // useEditorContentOrSelectionChange(() => {
-  //   const block = editor.getTextCursorPosition().block;
+  useEditorContentOrSelectionChange(() => {
+    const block = editor.getTextCursorPosition().block;
 
-  //   if (!("textAlignment" in block.props)) {
-  //     setPlacement("top-start");
-  //   } else {
-  //     setPlacement(
-  //       textAlignmentToPlacement(
-  //         block.props.textAlignment as DefaultProps["textAlignment"]
-  //       )
-  //     );
-  //   }
-  // }, editor);
+    if (!("textAlignment" in block.props)) {
+      setPlacement("top-start");
+    } else {
+      setPlacement(
+        textAlignmentToPlacement(
+          block.props.textAlignment as DefaultProps["textAlignment"]
+        )
+      );
+    }
+  }, editor);
 
   const state = useUIPluginState(
     editor.formattingToolbar.onUpdate.bind(editor.formattingToolbar)
@@ -76,17 +78,30 @@ export const FormattingToolbarController = (props: {
     state?.referencePos || null,
     3000,
     {
-      // placement,
+      placement,
       middleware: [
-        offset(10), 
-        shift({
-          mainAxis: false, 
-          crossAxis: true
-        }),
-        autoPlacement({
+        offset(10),
+        flip({
+          mainAxis: true,
           crossAxis: true,
-          allowedPlacements: ['top-start', 'top', 'top-end', 'bottom-start', 'bottom', 'bottom-end'],
-        })
+        }),
+        {
+          name: "detectOverflow",
+          async fn(state) {
+              const boundaryContainer = document.getElementById("editor-wrapper") ?? document.querySelector(".ProseMirror.bn-editor")!;
+              const rect = boundaryContainer.getBoundingClientRect();
+              const padding = 10;
+              let x = state.rects.reference.x - state.rects.floating.width / 2;
+              if (x < rect.left) {
+                x = rect.left + padding;
+              } else if (x > rect.right - state.rects.floating.width) {
+                x = rect.right - state.rects.floating.width - padding;
+              }
+              return {
+                x
+              }
+          },
+        },
       ],
       onOpenChange: (open, _event) => {
         // console.log("change", event);

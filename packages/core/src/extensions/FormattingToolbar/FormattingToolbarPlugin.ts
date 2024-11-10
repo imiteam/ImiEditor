@@ -252,6 +252,10 @@ export class FormattingToolbarProsemirrorPlugin extends EventEmitter<any> {
     return this.view?.state?.show || false;
   }
 
+  public get _view() {
+    return this.view;
+  }
+
   public onUpdate(callback: (state: FormattingToolbarState) => void) {
     return this.on("update", callback);
   }

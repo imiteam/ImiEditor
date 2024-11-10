@@ -959,6 +959,24 @@ export class BlockNoteEditor<
     const styles: Styles<SSchema> = {};
     const marks = this._tiptapEditor.state.selection.$to.marks();
 
+    const selection = this._tiptapEditor.state.selection;
+    if (!selection.empty) {
+      const startNode = selection.$from
+      const endNode = selection.$to
+    
+      // Используем методы Tiptap для получения координат
+      const startCoords = this._tiptapEditor.view.coordsAtPos(startNode.pos)
+      const endCoords = this._tiptapEditor.view.coordsAtPos(endNode.pos)
+
+      if (startCoords && endCoords) {
+        // Вычисляем общую высоту и координаты
+        const height = Math.max(endCoords.bottom, startCoords.bottom) - Math.min(startCoords.top, endCoords.top)
+        const top = Math.min(startCoords.top, endCoords.top);
+        (styles as any).height = height;
+        (styles as any).top = top;
+      }
+    }
+
     for (const mark of marks) {
       const config = this.schema.styleSchema[mark.type.name];
       if (!config) {
@@ -1289,5 +1307,25 @@ export class BlockNoteEditor<
         ignoreQueryLength: pluginState?.ignoreQueryLength || false,
       })
     );
+  }
+
+  public removeHighlight(color: string) {
+    // Получаем текущее состояние редактора
+    const state = this._tiptapEditor.state;
+    
+    // Создаем новую транзакцию
+    const tr = state.tr;
+    
+    // Итерируемся по всем блокам документа
+    state.doc.nodesBetween(0, state.doc.nodeSize - 2, (node, pos) => {
+      node.marks
+      .filter(mark => (mark.type.name === 'textColor' || mark.type.name === 'backgroundColor') && mark.attrs.stringValue === color)
+      .forEach(item => {
+        tr.removeMark(pos, pos + node.nodeSize, item);
+      })
+    });
+    
+    // Применяем транзакцию
+    this._tiptapEditor.view.dispatch(tr);
   }
 }

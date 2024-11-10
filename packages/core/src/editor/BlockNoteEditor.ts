@@ -1098,13 +1098,22 @@ export class BlockNoteEditor<
       this._tiptapEditor.state.selection.from
     )!;
 
-    return this._tiptapEditor.state.doc.resolve(startPos).index(depth - 1) > 0;
+    return this._tiptapEditor.state.doc.resolve(startPos).index(depth - 1) > 0 && depth < 8;
   }
 
   /**
    * Nests the block containing the text cursor into the block above it.
    */
   public nestBlock() {
+    const { depth } = getBlockInfoFromPos(
+      this._tiptapEditor.state.doc,
+      this._tiptapEditor.state.selection.from
+    )!;
+    
+    if (depth >= 8) {
+      return;
+    }
+    
     this._tiptapEditor.commands.sinkListItem("blockContainer");
   }
 

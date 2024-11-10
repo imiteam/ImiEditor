@@ -706,7 +706,8 @@ export const BlockContainer = Node.create<{
         if (
           this.options.editor.formattingToolbar?.shown ||
           this.options.editor.linkToolbar?.shown ||
-          this.options.editor.filePanel?.shown
+          this.options.editor.filePanel?.shown ||
+          !this.options.editor.canNestBlock()
         ) {
           // don't handle tabs if a toolbar is shown, so we can tab into / out of it
           return false;

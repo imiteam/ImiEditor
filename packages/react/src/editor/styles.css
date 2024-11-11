@@ -92,6 +92,7 @@
 
 .bn-container {
   font-family: var(--bn-font-family);
+  position: relative;
 }
 
 /* Editor body styling */

@@ -961,8 +961,8 @@ export class BlockNoteEditor<
 
     const selection = this._tiptapEditor.state.selection;
     if (!selection.empty) {
-      const startNode = selection.$from
-      const endNode = selection.$to
+      const startNode = selection.$head
+      const endNode = selection.$anchor
     
       // Используем методы Tiptap для получения координат
       const startCoords = this._tiptapEditor.view.coordsAtPos(startNode.pos)

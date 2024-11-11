@@ -18,7 +18,7 @@ export const OpenImiAIPlugin = () => {
           const parent = $from.node($from.depth);
           if (parent.type.name === 'paragraph' && parent.content.size === 0) {
             if (imiAIType) {
-              const tr = state.tr.replaceWith($from.before($from.depth), $from.after($from.depth), imiAIType.create());
+              const tr = state.tr.insert($from.before($from.depth), imiAIType.create());
               const newPos = $from.before($from.depth) + 1;
               tr.setSelection(TextSelection.create(tr.doc, newPos));
               dispatch(tr);

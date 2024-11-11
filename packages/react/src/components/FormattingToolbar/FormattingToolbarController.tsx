@@ -89,13 +89,15 @@ export const FormattingToolbarController = (props: {
           name: "detectOverflow",
           async fn(state) {
               const boundaryContainer = document.querySelector(".ProseMirror.bn-editor")!;
-              const rect = boundaryContainer.getBoundingClientRect();
+              const editorContainer = document.querySelector('.bn-container.bn-mantine')!;
+              const boundaryRect = boundaryContainer.getBoundingClientRect();
+              const editorRect = editorContainer.getBoundingClientRect();
               const padding = 10;
-              let x = state.rects.reference.x - state.rects.floating.width / 2;
-              if (x < rect.left) {
-                x = rect.left + padding;
-              } else if (x > rect.right - state.rects.floating.width) {
-                x = rect.right - state.rects.floating.width - padding;
+              let x = (state.rects.reference.x - editorRect.x) - state.rects.floating.width / 2;
+              if (x < boundaryRect.left - editorRect.left) {
+                x = boundaryRect.left - editorRect.left + padding;
+              } else if (x > boundaryRect.right - editorRect.left - state.rects.floating.width) {
+                x = boundaryRect.right - editorRect.left - state.rects.floating.width - padding;
               }
               return {
                 x

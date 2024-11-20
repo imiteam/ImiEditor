@@ -59,7 +59,7 @@ export class FormattingToolbarView implements PluginView {
     };
 
     pmView.dom.addEventListener("mousedown", this.viewMousedownHandler);
-    pmView.dom.addEventListener("mouseup", this.viewMouseupHandler);
+    pmView.root.addEventListener("mouseup", this.viewMouseupHandler);
     pmView.dom.addEventListener("dragstart", this.dragHandler);
     pmView.dom.addEventListener("dragover", this.dragHandler);
     pmView.dom.addEventListener("blur", this.blurHandler);
@@ -183,7 +183,7 @@ export class FormattingToolbarView implements PluginView {
 
   destroy() {
     this.pmView.dom.removeEventListener("mousedown", this.viewMousedownHandler);
-    this.pmView.dom.removeEventListener("mouseup", this.viewMouseupHandler);
+    this.pmView.root.removeEventListener("mouseup", this.viewMouseupHandler);
     this.pmView.dom.removeEventListener("dragstart", this.dragHandler);
     this.pmView.dom.removeEventListener("dragover", this.dragHandler);
     this.pmView.dom.removeEventListener("blur", this.blurHandler);

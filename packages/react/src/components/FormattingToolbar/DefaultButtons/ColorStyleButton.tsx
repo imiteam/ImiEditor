@@ -138,19 +138,21 @@ export const ColorStyleButton = () => {
   return (
     <Components.Generic.Menu.Root>
       <Components.Generic.Menu.Trigger>
-        <Components.FormattingToolbar.Button
-          className={"bn-button"}
-          data-test="colors"
-          label={dict.formatting_toolbar.colors.tooltip}
-          mainTooltip={dict.formatting_toolbar.colors.tooltip}
-          icon={
-            <ColorIcon
-              textColor={currentTextColor}
-              backgroundColor={currentBackgroundColor}
-              size={20}
-            />
-          }
-        />
+        <div className="color-style-select">
+          <Components.FormattingToolbar.Button
+            className={"bn-button"}
+            data-test="colors"
+            label={dict.formatting_toolbar.colors.tooltip}
+            mainTooltip={dict.formatting_toolbar.colors.tooltip}
+            icon={
+              <ColorIcon
+                textColor={currentTextColor}
+                backgroundColor={currentBackgroundColor}
+                size={20}
+              />
+            }
+          />
+        </div>
       </Components.Generic.Menu.Trigger>
       <Components.Generic.Menu.Dropdown
         className={"bn-menu-dropdown bn-color-picker-dropdown"}>

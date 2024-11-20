@@ -106,7 +106,6 @@ export const FormattingToolbarController = (props: {
         },
       ],
       onOpenChange: (open, _event) => {
-        // console.log("change", event);
         if (!open) {
           editor.formattingToolbar.closeMenu();
           editor.focus();

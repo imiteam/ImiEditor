@@ -105,7 +105,13 @@ export class FormattingToolbarView implements PluginView {
     this.preventShow = true;
   };
 
-  viewMouseupHandler = () => {
+  viewMouseupHandler = (event: Event) => {
+    const toolbars = document.querySelectorAll('.bn-toolbar');
+    for (const toolbar of toolbars) {
+      if (toolbar.contains(event.target as Node)) {
+        return;
+      }
+    }
     this.preventShow = false;
     setTimeout(() => this.update(this.pmView));
   };

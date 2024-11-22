@@ -107,8 +107,14 @@ export class FormattingToolbarView implements PluginView {
 
   viewMouseupHandler = (event: Event) => {
     const toolbars = document.querySelectorAll('.bn-toolbar');
+    const modals = document.querySelectorAll('.editor-check-modal');
     for (const toolbar of toolbars) {
       if (toolbar.contains(event.target as Node)) {
+        return;
+      }
+    }
+    for (const modal of modals) {
+      if (modal.contains(event.target as Node)) {
         return;
       }
     }
